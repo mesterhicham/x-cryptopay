@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, OnModuleInit } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,7 +12,7 @@ import { EmailService } from '../email/email.service';
 import { EmailTemplateType } from '../email-template.entity';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -21,6 +21,32 @@ export class AuthService {
     private jwtService: JwtService,
     private emailService: EmailService,
   ) {}
+
+  async onModuleInit() {
+    await this.seedAdmin();
+  }
+
+  private async seedAdmin() {
+    const adminEmail = 'admin@x-cryptopay.com';
+    const adminPassword = 'AdminPassword123!';
+    
+    const existingAdmin = await this.userRepository.findOne({ where: { email: adminEmail } });
+    if (!existingAdmin) {
+      console.log('Seeding default admin...');
+      const salt = await bcrypt.genSalt();
+      const hash = await bcrypt.hash(adminPassword, salt);
+      
+      const admin = this.userRepository.create({
+        email: adminEmail,
+        passwordHash: hash,
+        role: Role.ADMIN,
+        firstName: 'System',
+        lastName: 'Admin',
+      });
+      await this.userRepository.save(admin);
+      console.log('Admin seeded successfully.');
+    }
+  }
 
   async register(
     email: string, 
