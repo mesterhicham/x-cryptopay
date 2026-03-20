@@ -7,6 +7,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+RUN mkdir -p public/uploads
 RUN npm run build
 
 # Production stage
@@ -17,6 +18,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --only=production
 
+RUN mkdir -p public/uploads
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/public ./public
 
