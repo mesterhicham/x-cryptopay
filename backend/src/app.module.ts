@@ -44,7 +44,7 @@ import { SEOSettings } from './seo.entity';
           password: !url ? configService.get<string>('DB_PASS', 'root') : undefined,
           database: !url ? configService.get<string>('DB_NAME', 'x-cryptopay') : undefined,
           entities: [Merchant, PaymentRequest, WalletAddress, User, PayoutWallet, PayoutRequest, EmailSettings, EmailTemplate, Branding, SEOSettings],
-          synchronize: configService.get<string>('NODE_ENV') === 'development', // Auto-create tables only in dev
+          synchronize: true, // Auto-create tables for MVP / Railway deployment
         };
       },
       inject: [ConfigService],
