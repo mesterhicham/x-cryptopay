@@ -95,7 +95,7 @@ export default function BrandingPage() {
       });
       if (!res.ok) throw new Error();
       const { url } = await res.json();
-      setBranding({ ...branding, [field]: `http://localhost:3000${url}` });
+      setBranding({ ...branding, [field]: `${API_URL}${url}` });
       setStatus({ type: 'success', message: `${field} uploaded successfully!` });
     } catch {
       setStatus({ type: 'error', message: `Failed to upload ${field}` });
