@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { FileText, Save, Eye, Plus, Pencil, Trash2, Loader2, CheckCircle2, Code, Mail, X } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 interface EmailTemplate {
   id: string;
@@ -34,7 +35,7 @@ export default function EmailTemplatesPage() {
   const fetchTemplates = async () => {
     if (!session?.user?.accessToken) return;
     try {
-      const res = await fetch('http://localhost:3000/api/email/templates', {
+      const res = await fetch(`${API_URL}/api/email/templates`, {
         headers: { 'Authorization': `Bearer ${session.user.accessToken}` }
       });
       if (res.ok) {
@@ -55,7 +56,7 @@ export default function EmailTemplatesPage() {
     setSaving(true);
     try {
       const isNew = !templates.find(t => t.id === editing.id);
-      const url = isNew ? 'http://localhost:3000/api/email/templates' : `http://localhost:3000/api/email/templates/${editing.id}`;
+      const url = isNew ? `${API_URL}/api/email/templates` : `${API_URL}/api/email/templates/${editing.id}`;
       const method = isNew ? 'POST' : 'PUT';
 
       const res = await fetch(url, {
@@ -83,7 +84,7 @@ export default function EmailTemplatesPage() {
   const handleDelete = async (id: string) => {
     if (!session?.user?.accessToken || !confirm('Are you sure you want to delete this template?')) return;
     try {
-      const res = await fetch(`http://localhost:3000/api/email/templates/${id}`, {
+      const res = await fetch(`${API_URL}/api/email/templates/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${session.user.accessToken}` }
       });
@@ -99,7 +100,7 @@ export default function EmailTemplatesPage() {
   const handleToggle = async (id: string, currentStatus: boolean) => {
     if (!session?.user?.accessToken) return;
     try {
-      await fetch(`http://localhost:3000/api/email/templates/${id}`, {
+      await fetch(`${API_URL}/api/email/templates/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

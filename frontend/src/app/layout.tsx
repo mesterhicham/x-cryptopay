@@ -4,12 +4,13 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers";
 import { BrandingProvider } from "@/components/BrandingProvider";
+import { API_URL } from "@/lib/api";
 
 const inter = Inter({ subsets: ["latin"] });
 
 async function getBranding() {
   try {
-    const res = await fetch('http://localhost:3000/api/branding', { next: { revalidate: 60 } });
+    const res = await fetch(`${API_URL}/api/branding`, { next: { revalidate: 60 } });
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -19,7 +20,7 @@ async function getBranding() {
 
 async function getSEO() {
   try {
-    const res = await fetch('http://localhost:3000/api/seo', { next: { revalidate: 60 } });
+    const res = await fetch(`${API_URL}/api/seo`, { next: { revalidate: 60 } });
     if (!res.ok) return null;
     return await res.json();
   } catch {

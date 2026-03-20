@@ -1,6 +1,7 @@
 "use client";
 import { motion } from 'framer-motion';
 import { KeyRound, Webhook, BarChart3, Copy, CheckCircle2 } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 
@@ -11,7 +12,7 @@ export default function MerchantDashboard() {
 
   useEffect(() => {
     if (session?.accessToken) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/auth/me`, {
+      fetch(`${API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${session.accessToken}` }
       })
       .then(res => res.json())

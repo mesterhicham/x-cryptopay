@@ -15,6 +15,7 @@ import {
   Tag,
   AlignLeft
 } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 interface SEO {
   title: string;
@@ -43,7 +44,7 @@ export default function SEOPage() {
   useEffect(() => {
     const loadSEO = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/seo');
+        const res = await fetch(`${API_URL}/api/seo`);
         if (res.ok) {
           const data = await res.json();
           if (data) setSeo(data);
@@ -60,7 +61,7 @@ export default function SEOPage() {
     setSaving(true);
     setStatus(null);
     try {
-      const res = await fetch('http://localhost:3000/api/seo', {
+      const res = await fetch(`${API_URL}/api/seo`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

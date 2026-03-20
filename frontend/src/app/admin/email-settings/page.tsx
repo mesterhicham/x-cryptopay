@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { Mail, Save, TestTube, Eye, EyeOff, Loader2, CheckCircle2, AlertTriangle, Server, Lock, Send } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 interface SmtpConfig {
   host: string;
@@ -29,7 +30,7 @@ export default function EmailSettingsPage() {
     const loadConfig = async () => {
       if (!session?.user?.accessToken) return;
       try {
-        const res = await fetch('http://localhost:3000/api/email/settings', {
+        const res = await fetch(`${API_URL}/api/email/settings`, {
           headers: { 'Authorization': `Bearer ${session.user.accessToken}` }
         });
         if (res.ok) {
@@ -48,7 +49,7 @@ export default function EmailSettingsPage() {
     setSaving(true);
     setStatus(null);
     try {
-      const res = await fetch('http://localhost:3000/api/email/settings', {
+      const res = await fetch(`${API_URL}/api/email/settings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,7 +72,7 @@ export default function EmailSettingsPage() {
     setTesting(true);
     setStatus(null);
     try {
-      const res = await fetch('http://localhost:3000/api/email/test-send', {
+      const res = await fetch(`${API_URL}/api/email/test-send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

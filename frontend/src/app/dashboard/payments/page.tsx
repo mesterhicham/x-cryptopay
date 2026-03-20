@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { useState, useEffect, useCallback } from 'react';
 import { Wallet, Search, Download, ArrowDownLeft, ArrowUpRight, ExternalLink, Clock, CheckCircle2, XCircle, AlertTriangle, Loader2, Copy } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 interface Transaction {
   id: string;
@@ -46,8 +47,7 @@ export default function PaymentsPage() {
     const token = (session as any)?.accessToken;
     if (!token) { setLoading(false); return; }
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      const res = await fetch(`${apiUrl}/api/payments/merchant/transactions`, {
+      const res = await fetch(`${API_URL}/api/payments/merchant/transactions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {

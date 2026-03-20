@@ -33,16 +33,20 @@ import { SEOSettings } from './seo.entity';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get<string>('DB_HOST', 'localhost'),
-        port: configService.get<number>('DB_PORT', 8889), // Updated for User's environment
-        username: configService.get<string>('DB_USER', 'root'),
-        password: configService.get<string>('DB_PASS', 'root'),
-        database: configService.get<string>('DB_NAME', 'x-cryptopay'),
-        entities: [Merchant, PaymentRequest, WalletAddress, User, PayoutWallet, PayoutRequest, EmailSettings, EmailTemplate, Branding, SEOSettings],
-        synchronize: true, // Auto-create tables (only for MVP/Dev)
-      }),
+      useFactory: (configService: ConfigService) => {
+        const url = configService.get<string>('MYSQL_URL') || configService.get<string>('DATABASE_URL');
+        return {
+          type: 'mysql',
+          url: url, // If url is provided, TypeORM uses it
+          host: !url ? configService.get<string>('DB_HOST', 'localhost') : undefined,
+          port: !url ? configService.get<number>('DB_PORT', 8889) : undefined,
+          username: !url ? configService.get<string>('DB_USER', 'root') : undefined,
+          password: !url ? configService.get<string>('DB_PASS', 'root') : undefined,
+          database: !url ? configService.get<string>('DB_NAME', 'x-cryptopay') : undefined,
+          entities: [Merchant, PaymentRequest, WalletAddress, User, PayoutWallet, PayoutRequest, EmailSettings, EmailTemplate, Branding, SEOSettings],
+          synchronize: configService.get<string>('NODE_ENV') === 'development', // Auto-create tables only in dev
+        };
+      },
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([Merchant, PaymentRequest, WalletAddress, Branding, SEOSettings]),

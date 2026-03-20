@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FileText, Search, Download, Filter, ArrowDownRight, ArrowUpRight, CheckCircle2, Loader2, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { API_URL } from '@/lib/api';
 
 export default function AdminPaymentsPage() {
   const { data: session }: any = useSession();
@@ -39,7 +40,7 @@ export default function AdminPaymentsPage() {
     setIsSweeping(true);
     try {
       if (session?.accessToken) {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/auth/sweep-fees`, {
+        await fetch(`${API_URL}/api/auth/sweep-fees`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${session.accessToken}`

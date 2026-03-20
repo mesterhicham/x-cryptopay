@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSession } from 'next-auth/react';
 import { useState, useEffect, useCallback } from 'react';
 import { Wallet, CheckCircle2, XCircle, Clock, Send, ExternalLink, Unplug, Plug, AlertTriangle, Loader2 } from 'lucide-react';
+import { API_URL } from '@/lib/api';
 
 interface PayoutReq {
   id: string;
@@ -102,8 +103,7 @@ export default function PayoutVaultsPage() {
     const token = (session as any)?.accessToken;
     if (!token) { setLoading(false); return; }
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      const res = await fetch(`${apiUrl}/api/payouts/dashboard`, {
+      const res = await fetch(`${API_URL}/api/payouts/dashboard`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
@@ -141,8 +141,7 @@ export default function PayoutVaultsPage() {
       showToast('Transaction sent! Waiting for confirmation...', 'success');
       const receipt = await tx.wait();
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      await fetch(`${apiUrl}/api/payouts/${payout.id}/complete`, {
+      await fetch(`${API_URL}/api/payouts/${payout.id}/complete`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${(session as any)?.accessToken}` },
         body: JSON.stringify({ txHash: receipt.hash })
@@ -161,8 +160,7 @@ export default function PayoutVaultsPage() {
   // ---- Reject ----
   const handleReject = async (payoutId: string) => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      await fetch(`${apiUrl}/api/payouts/${payoutId}/reject`, {
+      await fetch(`${API_URL}/api/payouts/${payoutId}/reject`, {
         method: 'PATCH',
         headers: { Authorization: `Bearer ${(session as any)?.accessToken}` }
       });

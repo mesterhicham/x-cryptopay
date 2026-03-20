@@ -23,6 +23,8 @@ interface Branding {
   pwaLogoUrl: string;
 }
 
+import { API_URL } from '@/lib/api';
+
 export default function BrandingPage() {
   const { data: session } = useSession();
   const [branding, setBranding] = useState<Branding>({
@@ -39,7 +41,7 @@ export default function BrandingPage() {
   useEffect(() => {
     const loadBranding = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/branding');
+        const res = await fetch(`${API_URL}/api/branding`);
         if (res.ok) {
           const data = await res.json();
           if (data) setBranding(data);
@@ -56,7 +58,7 @@ export default function BrandingPage() {
     setSaving(true);
     setStatus(null);
     try {
-      const res = await fetch('http://localhost:3000/api/branding', {
+      const res = await fetch(`${API_URL}/api/branding`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +86,7 @@ export default function BrandingPage() {
     formData.append('file', file);
 
     try {
-      const res = await fetch('http://localhost:3000/api/branding/upload', {
+      const res = await fetch(`${API_URL}/api/branding/upload`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${session.user.accessToken}`
