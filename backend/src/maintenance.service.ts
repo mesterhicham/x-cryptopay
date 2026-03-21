@@ -1,13 +1,13 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Not, In } from 'typeorm';
-import { User } from '../user.entity';
-import { Merchant } from '../merchant.entity';
-import { PaymentRequest } from '../payment-request.entity';
-import { WalletAddress } from '../wallet-address.entity';
-import { PayoutRequest } from '../payout-request.entity';
-import { PayoutWallet } from '../payout-wallet.entity';
-import { Role } from '../auth/role.enum';
+import { User } from './user.entity';
+import { Merchant } from './merchant.entity';
+import { PaymentRequest } from './payment-request.entity';
+import { WalletAddress } from './wallet-address.entity';
+import { PayoutRequest } from './payout-request.entity';
+import { PayoutWallet } from './payout-wallet.entity';
+import { Role } from './auth/role.enum';
 
 @Injectable()
 export class MaintenanceService {
