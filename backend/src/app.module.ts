@@ -25,6 +25,8 @@ import { BrandingModule } from './branding/branding.module';
 import { Branding } from './branding.entity';
 import { SEOModule } from './seo/seo.module';
 import { SEOSettings } from './seo.entity';
+import { MaintenanceService } from './maintenance.service';
+import { MaintenanceController } from './maintenance.controller';
 
 @Module({
   imports: [
@@ -63,7 +65,7 @@ import { SEOSettings } from './seo.entity';
     BrandingModule,
     SEOModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, MaintenanceController],
+  providers: [AppService, MaintenanceService],
 })
 export class AppModule {}
