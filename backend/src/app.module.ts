@@ -51,7 +51,7 @@ import { MaintenanceController } from './maintenance.controller';
       },
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Merchant, PaymentRequest, WalletAddress, Branding, SEOSettings]),
+    TypeOrmModule.forFeature([Merchant, PaymentRequest, WalletAddress, User, PayoutWallet, PayoutRequest, Branding, SEOSettings]),
 
     ScheduleModule.forRoot(),
     WalletModule,
